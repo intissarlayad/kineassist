@@ -26,12 +26,12 @@ from sound_tts import play_error, play_good, speak
 
 load_dotenv()
 
-st.set_page_config(page_title="KineAssist - Patient", page_icon="assets/logoKine.png", layout="wide")
+st.set_page_config(page_title="KineAssist - Patient", page_icon="assets/logoKine.png", layout="wide", initial_sidebar_state="expanded")
 
 st.markdown(
     """
     <style>
-    [data-testid="collapsedControl"] { display:none !important; }
+    [data-testid="collapsedControl"] { display:flex !important; visibility:visible !important; }
     section[data-testid="stSidebar"] { min-width:320px !important; transform:none !important; }
     section[data-testid="stSidebar"] [data-testid="stSidebarNav"] { display:none !important; }
     #MainMenu, footer, header, [data-testid="stHeader"] { display:none !important; }

@@ -20,7 +20,7 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from core.rag_engine import PROTOCOLS
 
-st.set_page_config(page_title="Dashboard Kiné — KineAssist", page_icon="assets/logoKine.png", layout="wide")
+st.set_page_config(page_title="Dashboard Kiné — KineAssist", page_icon="assets/logoKine.png", layout="wide", initial_sidebar_state="expanded")
 require_auth(allowed_roles=["kine"])
 user = get_current_user()
 
@@ -78,7 +78,7 @@ st.markdown("""
 }
 #MainMenu, footer, header, [data-testid="stHeader"] { display: none !important; }
 [data-testid="stSidebarNav"] { display: none !important; }
-[data-testid="collapsedControl"] { display: none !important; }
+[data-testid="collapsedControl"] { display: flex !important; visibility: visible !important; }
 
 /* ── Sidebar ── */
 section[data-testid="stSidebar"] {
