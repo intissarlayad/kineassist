@@ -1,58 +1,97 @@
 """
-mailer.py — Envoi d'emails d'invitation via Gmail SMTP
-=======================================================
-Configuration via st.secrets (Streamlit Cloud) ou variables d'environnement (local) :
-  GMAIL_USER = votre.email@gmail.com
-  GMAIL_PASS = votre_mot_de_passe_application
-  APP_URL    = https://votre-app.streamlit.app
+mailer.py — Envoi d'emails d'invitation via l'API Brevo (Sendinblue)
+=====================================================================
+Ce module utilise les secrets de Streamlit Cloud (ou les variables d'environnement) :
+  - BREVO_API_KEY : clé API Brevo (requise)
+  - GMAIL_USER   : adresse "expéditeur" affichée dans l'email (ex: noreply@votre-domaine.com)
+  - APP_URL      : URL de l'application (pour le lien d'activation)
 
-Pour générer un mot de passe d'application Gmail :
-  1. Accédez à myaccount.google.com
-  2. Sécurité > Validation en deux étapes (à activer)
-  3. Sécurité > Mots de passe des applications
-  4. Générez un mot de passe pour « Autre (nom personnalisé) »
-  5. Copiez le code à 16 caractères — c'est votre GMAIL_PASS
+En local, les valeurs sont lues depuis le fichier .env.
 """
 
-import smtplib
 import os
-from email.mime.multipart import MIMEMultipart
+import json
+import requests
 from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 
-
+# ---------------------------------------------------------------------------
+# Helper : lecture des secrets (Streamlit Cloud > env)
+# ---------------------------------------------------------------------------
 def _get_secret(key: str, default: str = "") -> str:
-    """
-    Lit une valeur depuis st.secrets (Streamlit Cloud) en priorité,
-    puis depuis les variables d'environnement, enfin retourne default.
+    """Retourne la valeur d'un secret.
+    1️⃣ Essaie `st.secrets[key]` (Streamlit Cloud)
+    2️⃣ Sinon, variable d'environnement
+    3️⃣ Sinon, valeur par défaut.
     """
     try:
         import streamlit as st
-        val = st.secrets.get(key, "")
+        val = st.secrets.get(key)
         if val:
             return str(val)
     except Exception:
         pass
     return os.getenv(key, default)
 
+# ---------------------------------------------------------------------------
+# Envoi d'email via Brevo
+# ---------------------------------------------------------------------------
+def _send_via_brevo(
+    to_email: str,
+    subject: str,
+    html_content: str,
+    sender_email: str,
+    api_key: str,
+) -> tuple[bool, str]:
+    """Envoie l'email avec l'API Brevo.
+    Retourne (True, "OK") en cas de succès, sinon (False, message d'erreur).
+    """
+    url = "https://api.brevo.com/v3/smtp/email"
+    payload = {
+        "sender": {"email": sender_email, "name": "KineAssist"},
+        "to": [{"email": to_email}],
+        "subject": subject,
+        "htmlContent": html_content,
+    }
+    headers = {
+        "api-key": api_key,
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+    }
+    try:
+        resp = requests.post(url, data=json.dumps(payload), headers=headers, timeout=10)
+        if resp.status_code == 201:
+            return True, "Email envoyé avec succès via Brevo."
+        # Brevo renvoie souvent 400 avec détail dans le JSON
+        try:
+            err = resp.json().get("message", resp.text)
+        except Exception:
+            err = resp.text
+        return False, f"Erreur Brevo ({resp.status_code}) : {err}"
+    except Exception as e:
+        return False, f"Exception lors de l'appel à Brevo : {e}"
 
+# ---------------------------------------------------------------------------
+# Fonction publique appelée depuis l'application
+# ---------------------------------------------------------------------------
 def send_invitation_email(
     patient_email: str,
     patient_nom: str,
     kine_nom: str,
     token: str,
 ) -> tuple[bool, str]:
+    """Construit le message d'invitation et l'envoie via Brevo.
+    Retourne (True, message) si l'email a bien été transmis.
     """
-    Envoie un email d'invitation au patient.
-    Retourne (success: bool, message: str).
-    """
-    gmail_user = _get_secret("GMAIL_USER")
-    gmail_pass = _get_secret("GMAIL_PASS")
-    app_url     = _get_secret("APP_URL", "http://localhost:8501")
+    # Secrets
+    sender_email = _get_secret("GMAIL_USER")  # utilisé comme expéditeur
+    api_key = _get_secret("BREVO_API_KEY")
+    app_url = _get_secret("APP_URL", "http://localhost:8501")
 
-    if not gmail_user or not gmail_pass:
-        return False, (
-            "GMAIL_USER ou GMAIL_PASS non configuré "
-            "dans st.secrets ou les variables d'environnement."
+    if not sender_email or not api_key:
+        return (
+            False,
+            "GMAIL_USER ou BREVO_API_KEY non configuré dans st.secrets ou les variables d'environnement.",
         )
 
     activation_link = f"{app_url}?token={token}"
