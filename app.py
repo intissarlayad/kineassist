@@ -1,4 +1,4 @@
-﻿import base64
+import base64
 import json
 import os
 import sys
@@ -44,12 +44,9 @@ user = get_current_user()
 
 def get_patient_protocol_from_db(patient_id):
     try:
-        from database import get_conn
-
-        conn = get_conn()
-        row = conn.execute("SELECT protocol FROM patients WHERE id=?", (patient_id,)).fetchone()
-        conn.close()
-        return row["protocol"] if row and row["protocol"] else ""
+        from database import get_patient_by_id
+        patient = get_patient_by_id(patient_id)
+        return patient.get("protocol", "")
     except Exception:
         return ""
 
