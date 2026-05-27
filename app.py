@@ -3,12 +3,15 @@ import json
 import os
 import sys
 import time
+import threading
 from datetime import date
 from pathlib import Path
 
 import cv2
 import numpy as np
+import av
 import streamlit as st
+from streamlit_webrtc import webrtc_streamer, VideoProcessorBase, RTCConfiguration
 from dotenv import load_dotenv
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -101,6 +104,112 @@ JOINT_TO_LM = {
     "coude_gauche": 13,
     "coude_droit": 14,
 }
+
+
+class VideoProcessor(VideoProcessorBase):
+    def __init__(self):
+        self.ex_id = None
+        self.targets = {}
+        self.tolerance = 15
+        self.ref_data = None
+        self.detector = None
+        self.target_reps = 10
+        self.lock = threading.Lock()
+        
+        # Shared states
+        self.rep_count = 0
+        self.scores_history = []
+        self.rep_angle_buffer = []
+        self.current_session_angles = []
+        self.feedback_msgs = []
+        self.rep_in_progress = False
+        self.frame_n = 0
+        self.last_tts_frame = -999
+        self.last_feedback_time = 0
+        self.current_angles = {}
+        
+        # Sound/TTS queues
+        self.sound_queue = []
+        self.tts_queue = []
+        self.completed = False
+        self.rag = None
+
+    def recv(self, frame: av.VideoFrame) -> av.VideoFrame:
+        img = frame.to_ndarray(format="bgr24")
+        if self.completed or not self.ex_id or not self.detector:
+            return av.VideoFrame.from_ndarray(img, format="bgr24")
+
+        img = cv2.flip(img, 1)
+        results, frame_rgb = self.detector.process_frame(img)
+
+        angles = {}
+        joint_colors = {}
+
+        if results.pose_landmarks:
+            raw = self.detector.get_raw_landmarks(results)
+            angles = get_exercise_angles(raw, self.ex_id)
+            for joint, value in angles.items():
+                target = self.targets.get(joint)
+                if target is not None:
+                    idx = JOINT_TO_LM.get(joint)
+                    if idx:
+                        joint_colors[idx] = angle_to_color(value, target, self.tolerance)
+
+            with self.lock:
+                self.current_angles = angles
+                self.rep_angle_buffer.append(angles)
+                self.current_session_angles.append(angles)
+
+            rep_done, self.rep_in_progress = detect_rep(angles, self.ex_id, self.rep_in_progress)
+            if rep_done:
+                score = score_rep(self.rep_angle_buffer, self.ref_data)
+                with self.lock:
+                    self.scores_history.append(score)
+                    self.rep_count += 1
+                    self.rep_angle_buffer = []
+                self.sound_queue.append("good")
+                self.tts_queue.append(f"Répétition {self.rep_count}.")
+                self.last_tts_frame = self.frame_n
+
+            if self.frame_n % 30 == 0 and angles and self.rag:
+                errors = classify_error(angles, self.targets, self.tolerance)
+                new_messages = self.rag.get_correction(self.ex_id, errors)
+                if new_messages:
+                    with self.lock:
+                        self.feedback_msgs = new_messages
+                        self.last_feedback_time = self.frame_n
+                    if errors and self.frame_n - self.last_tts_frame > 120:
+                        self.sound_queue.append("error")
+                        self.tts_queue.append("Corrigez votre mouvement.")
+                        self.last_tts_frame = self.frame_n
+
+        annotated = self.detector.draw_landmarks(frame_rgb, results, joint_colors)
+        h, w = annotated.shape[:2]
+        
+        cv2.rectangle(annotated, (0, 0), (w, 52), (5, 8, 20), -1)
+        cv2.putText(annotated, f"Reps: {self.rep_count}/{self.target_reps}", (12, 34), cv2.FONT_HERSHEY_SIMPLEX, 0.85, (248, 250, 252), 2)
+
+        with self.lock:
+            scores = list(self.scores_history)
+            feedback = list(self.feedback_msgs)
+
+        if scores:
+            last_score = scores[-1]
+            color = (34, 197, 94) if last_score >= 75 else (245, 158, 11) if last_score >= 50 else (244, 63, 94)
+            cv2.putText(annotated, f"Score: {last_score:.0f}", (w - 165, 34), cv2.FONT_HERSHEY_SIMPLEX, 0.8, color, 2)
+
+        if feedback and (self.frame_n - self.last_feedback_time) < 60:
+            for i, msg in enumerate(feedback[:2]):
+                clean = msg.encode("ascii", "ignore").decode()[:70]
+                y_pos = h - 62 + i * 24
+                cv2.rectangle(annotated, (8, y_pos - 17), (min(len(clean) * 8 + 18, w - 8), y_pos + 7), (10, 13, 26), -1)
+                cv2.putText(annotated, clean, (12, y_pos), cv2.FONT_HERSHEY_SIMPLEX, 0.42, (248, 250, 252), 1, cv2.LINE_AA)
+
+        self.frame_n += 1
+        
+        out_img = cv2.cvtColor(annotated, cv2.COLOR_RGB2BGR)
+        return av.VideoFrame.from_ndarray(out_img, format="bgr24")
+
 
 DEFAULTS = {
     "running": False,
@@ -1044,98 +1153,64 @@ elif page == "Exercices":
         joints_ph = st.empty()
 
     if st.session_state.running and ex_id:
+        targets = EXERCISE_TARGETS.get(ex_id, {})
+        ref_data = load_reference(selected_exercise.get("reference_file", ""))
         detector = PoseDetector(0.6, 0.6)
-        cap = cv2.VideoCapture(st.session_state.camera_index)
-        if not cap.isOpened():
-            st.error(f"Caméra {st.session_state.camera_index} inaccessible.")
-            st.session_state.running = False
-        else:
-            targets = EXERCISE_TARGETS.get(ex_id, {})
-            ref_data = load_reference(selected_exercise.get("reference_file", ""))
-            frame_n = 0
-            last_feedback_time = 0
-            last_tts_frame = -999
+
+        webrtc_ctx = webrtc_streamer(
+            key=f"webrtc-{ex_id}",
+            video_processor_factory=VideoProcessor,
+            rtc_configuration={
+                "iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]
+            },
+            media_stream_constraints={"video": True, "audio": False},
+        )
+
+        if webrtc_ctx.video_processor:
+            processor = webrtc_ctx.video_processor
+            with processor.lock:
+                if processor.ex_id is None:
+                    processor.ex_id = ex_id
+                    processor.targets = targets
+                    processor.tolerance = tolerance
+                    processor.ref_data = ref_data
+                    processor.detector = detector
+                    processor.target_reps = target_reps
+                    processor.rag = st.session_state.rag
 
             try:
-                while st.session_state.running:
-                    ret, frame = cap.read()
-                    if not ret:
-                        break
+                while webrtc_ctx.state.playing and st.session_state.running:
+                    with processor.lock:
+                        rep_count = processor.rep_count
+                        scores_history = list(processor.scores_history)
+                        current_angles = dict(processor.current_angles)
+                        feedback_msgs = list(processor.feedback_msgs)
+                        last_feedback_time = processor.last_feedback_time
+                        frame_n = processor.frame_n
+                        completed = processor.completed
 
-                    frame = cv2.flip(frame, 1)
-                    results, frame_rgb = detector.process_frame(frame)
-                    angles = {}
-                    joint_colors = {}
-
-                    if results.pose_landmarks:
-                        raw = detector.get_raw_landmarks(results)
-                        angles = get_exercise_angles(raw, ex_id)
-                        for joint, value in angles.items():
-                            target = targets.get(joint)
-                            if target is not None:
-                                idx = JOINT_TO_LM.get(joint)
-                                if idx:
-                                    joint_colors[idx] = angle_to_color(value, target, tolerance)
-
-                        st.session_state.rep_angle_buffer.append(angles)
-                        st.session_state.current_session_angles.append(angles)
-
-                        rep_done, st.session_state.rep_in_progress = detect_rep(angles, ex_id, st.session_state.rep_in_progress)
-                        if rep_done:
-                            score = score_rep(st.session_state.rep_angle_buffer, ref_data)
-                            st.session_state.scores_history.append(score)
-                            st.session_state.rep_count += 1
-                            st.session_state.rep_angle_buffer = []
+                    while processor.sound_queue:
+                        snd = processor.sound_queue.pop(0)
+                        if snd == "good":
                             play_good()
-                            speak(f"Répétition {st.session_state.rep_count}.")
-                            last_tts_frame = frame_n
+                        elif snd == "error":
+                            play_error()
 
-                        if frame_n % 30 == 0 and angles:
-                            errors = classify_error(angles, targets, tolerance)
-                            new_messages = st.session_state.rag.get_correction(ex_id, errors)
-                            if new_messages:
-                                st.session_state.feedback_msgs = new_messages
-                                last_feedback_time = frame_n
-                                if errors and frame_n - last_tts_frame > 120:
-                                    play_error()
-                                    speak("Corrigez votre mouvement.", rate=0.97)
-                                    last_tts_frame = frame_n
+                    while processor.tts_queue:
+                        txt = processor.tts_queue.pop(0)
+                        speak(txt)
 
-                    annotated = detector.draw_landmarks(frame_rgb, results, joint_colors)
-                    h, w = annotated.shape[:2]
-                    cv2.rectangle(annotated, (0, 0), (w, 52), (5, 8, 20), -1)
-                    cv2.putText(annotated, f"Reps: {st.session_state.rep_count}/{target_reps}", (12, 34), cv2.FONT_HERSHEY_SIMPLEX, 0.85, (248, 250, 252), 2)
-
-                    if st.session_state.scores_history:
-                        last_score = st.session_state.scores_history[-1]
-                        color = (34, 197, 94) if last_score >= 75 else (245, 158, 11) if last_score >= 50 else (244, 63, 94)
-                        cv2.putText(annotated, f"Score: {last_score:.0f}", (w - 165, 34), cv2.FONT_HERSHEY_SIMPLEX, 0.8, color, 2)
-
-                    if st.session_state.feedback_msgs and (frame_n - last_feedback_time) < 60:
-                        for i, msg in enumerate(st.session_state.feedback_msgs[:2]):
-                            clean = msg.encode("ascii", "ignore").decode()[:70]
-                            y_pos = h - 62 + i * 24
-                            cv2.rectangle(annotated, (8, y_pos - 17), (min(len(clean) * 8 + 18, w - 8), y_pos + 7), (10, 13, 26), -1)
-                            cv2.putText(annotated, clean, (12, y_pos), cv2.FONT_HERSHEY_SIMPLEX, 0.42, (248, 250, 252), 1, cv2.LINE_AA)
-
-                    frame_ph.image(annotated, channels="RGB", use_container_width=True)
-
-                    if st.session_state.feedback_msgs and (frame_n - last_feedback_time) < 90:
-                        overlay_ph.markdown(build_feedback_overlay(st.session_state.feedback_msgs), unsafe_allow_html=True)
-                    else:
-                        overlay_ph.empty()
-
-                    avg = np.mean(st.session_state.scores_history) if st.session_state.scores_history else 0
+                    avg = np.mean(scores_history) if scores_history else 0
                     rep_ph.markdown(
                         f"""
                         <div class="metric-card">
                           <div class="metric-label">Répétitions</div>
-                          <div class="metric-value">{st.session_state.rep_count}<span class="metric-unit"> / {target_reps}</span></div>
+                          <div class="metric-value">{rep_count}<span class="metric-unit"> / {target_reps}</span></div>
                         </div>
                         """,
                         unsafe_allow_html=True,
                     )
-                    rep_ph.progress(min(st.session_state.rep_count / target_reps, 1.0))
+                    rep_ph.progress(min(rep_count / target_reps, 1.0))
 
                     score_text = f"{avg:.0f}" if avg > 0 else "--"
                     score_ph.markdown(
@@ -1148,9 +1223,9 @@ elif page == "Exercices":
                         unsafe_allow_html=True,
                     )
 
-                    if angles:
+                    if current_angles:
                         html = ""
-                        for joint, value in angles.items():
+                        for joint, value in current_angles.items():
                             target = targets.get(joint, value)
                             diff = abs(value - target)
                             cls = "ok" if diff <= tolerance else "warn" if diff <= tolerance * 2 else "err"
@@ -1158,9 +1233,16 @@ elif page == "Exercices":
                             html += f'<div class="joint-row"><span class="joint-name">{label}</span><span class="{cls}">{value:.0f} deg</span></div>'
                         joints_ph.markdown(html, unsafe_allow_html=True)
 
-                    if st.session_state.rep_count >= target_reps:
+                    if feedback_msgs and (frame_n - last_feedback_time) < 90:
+                        overlay_ph.markdown(build_feedback_overlay(feedback_msgs), unsafe_allow_html=True)
+                    else:
+                        overlay_ph.empty()
+
+                    if rep_count >= target_reps and not completed:
+                        with processor.lock:
+                            processor.completed = True
                         st.session_state.running = False
-                        summary = progression_summary(st.session_state.scores_history)
+                        summary = progression_summary(scores_history)
                         summary["exercise"] = selected_name
                         summary["week"] = week_number
                         st.session_state.all_sessions.append(summary)
@@ -1169,13 +1251,13 @@ elif page == "Exercices":
                         speak(f"Bravo. Séance terminée. Score {int(avg)} sur cent.")
                         st.success(f"Séance terminée. Score final : {avg:.0f}/100")
                         st.balloons()
+                        time.sleep(1.0)
+                        st.rerun()
                         break
 
-                    frame_n += 1
-                    time.sleep(0.03)
-            finally:
-                cap.release()
-                detector.close()
+                    time.sleep(0.1)
+            except Exception as e:
+                st.error(f"Erreur de flux : {e}")
     else:
         frame_ph.markdown(
             """
