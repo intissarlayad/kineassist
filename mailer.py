@@ -1,9 +1,10 @@
 """
 mailer.py — Envoi d'emails d'invitation via Gmail SMTP
 =======================================================
-Configuration via variables d'environnement :
+Configuration via st.secrets (Streamlit Cloud) ou variables d'environnement (local) :
   GMAIL_USER = votre.email@gmail.com
   GMAIL_PASS = votre_mot_de_passe_application
+  APP_URL    = https://votre-app.streamlit.app
 
 Pour générer un mot de passe d'application Gmail :
   1. Accédez à myaccount.google.com
@@ -18,9 +19,20 @@ import os
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
-GMAIL_USER = os.getenv("GMAIL_USER", "")
-GMAIL_PASS = os.getenv("GMAIL_PASS", "")
-APP_URL     = os.getenv("APP_URL", "http://localhost:8501")
+
+def _get_secret(key: str, default: str = "") -> str:
+    """
+    Lit une valeur depuis st.secrets (Streamlit Cloud) en priorité,
+    puis depuis les variables d'environnement, enfin retourne default.
+    """
+    try:
+        import streamlit as st
+        val = st.secrets.get(key, "")
+        if val:
+            return str(val)
+    except Exception:
+        pass
+    return os.getenv(key, default)
 
 
 def send_invitation_email(
@@ -33,13 +45,17 @@ def send_invitation_email(
     Envoie un email d'invitation au patient.
     Retourne (success: bool, message: str).
     """
-    if not GMAIL_USER or not GMAIL_PASS:
+    gmail_user = _get_secret("GMAIL_USER")
+    gmail_pass = _get_secret("GMAIL_PASS")
+    app_url     = _get_secret("APP_URL", "http://localhost:8501")
+
+    if not gmail_user or not gmail_pass:
         return False, (
             "GMAIL_USER ou GMAIL_PASS non configuré "
-            "dans les variables d'environnement."
+            "dans st.secrets ou les variables d'environnement."
         )
 
-    activation_link = f"{APP_URL}?token={token}"
+    activation_link = f"{app_url}?token={token}"
     subject = f"KineAssist — {kine_nom} vous invite à rejoindre votre espace de rééducation"
 
     html_body = f"""<!DOCTYPE html>
@@ -229,13 +245,13 @@ def send_invitation_email(
     try:
         msg = MIMEMultipart("alternative")
         msg["Subject"] = subject
-        msg["From"]    = GMAIL_USER
+        msg["From"]    = gmail_user
         msg["To"]      = patient_email
         msg.attach(MIMEText(html_body, "html", "utf-8"))
 
         with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
-            server.login(GMAIL_USER, GMAIL_PASS)
-            server.sendmail(GMAIL_USER, patient_email, msg.as_string())
+            server.login(gmail_user, gmail_pass)
+            server.sendmail(gmail_user, patient_email, msg.as_string())
 
         return True, "Email envoyé avec succès."
 
