@@ -9,9 +9,7 @@ pillow>=10.0.0
 fastdtw>=0.3.4
 scipy>=1.11.0
 
-# RAG - Recherche semantique locale (sans API)
-sentence-transformers>=2.7.0
-faiss-cpu>=1.7.4
+# RAG - fallback leger sans dependances vectorielles lourdes sur Streamlit Cloud
 
 # Rapport PDF
 reportlab>=4.0.0

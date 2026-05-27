@@ -19,13 +19,7 @@ import numpy as np
 from pathlib import Path
 
 # ── Tentative import librairies vectorielles (optionnel) ──────────────────────
-try:
-    import faiss
-    from sentence_transformers import SentenceTransformer
-    HAS_VECTOR = True
-except ImportError:
-    HAS_VECTOR = False
-
+# Librairies vectorielles chargees uniquement si un index existe, pour economiser la RAM Streamlit Cloud.
 INDEX_DIR = Path("data/rag_index")
 
 
@@ -178,25 +172,32 @@ class RAGEngine:
 
     def _load(self):
         """Charge l'index FAISS si disponible, sinon mode regles."""
-        if not HAS_VECTOR:
+        idx_path   = self.index_dir / "medical.index"
+        chunk_path = self.index_dir / "chunks.pkl"
+
+        if not (idx_path.exists() and chunk_path.exists()):
             self._mode = "regles"
             self.ready = True
             return
 
-        idx_path   = self.index_dir / "medical.index"
-        chunk_path = self.index_dir / "chunks.pkl"
+        try:
+            import faiss
+            from sentence_transformers import SentenceTransformer
+        except ImportError:
+            self._mode = "regles"
+            self.ready = True
+            return
 
-        if idx_path.exists() and chunk_path.exists():
-            try:
-                self.index    = faiss.read_index(str(idx_path))
-                with open(chunk_path, "rb") as f:
-                    self.chunks = pickle.load(f)
-                self.embedder = SentenceTransformer("all-MiniLM-L6-v2")
-                self._mode    = "rag_reel"
-                self.ready    = True
-                return
-            except Exception:
-                pass
+        try:
+            self.index = faiss.read_index(str(idx_path))
+            with open(chunk_path, "rb") as f:
+                self.chunks = pickle.load(f)
+            self.embedder = SentenceTransformer("all-MiniLM-L6-v2")
+            self._mode = "rag_reel"
+            self.ready = True
+            return
+        except Exception:
+            pass
 
         self._mode = "regles"
         self.ready = True

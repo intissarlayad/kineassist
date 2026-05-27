@@ -7,11 +7,8 @@ import threading
 from datetime import date
 from pathlib import Path
 
-import cv2
 import numpy as np
-import av
 import streamlit as st
-from streamlit_webrtc import webrtc_streamer, VideoProcessorBase, RTCConfiguration
 from dotenv import load_dotenv
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -19,8 +16,6 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from auth import get_current_user, logout_button, require_auth
 from core.angle_calculator import angle_to_color, get_exercise_angles
 from core.comparator import classify_error, progression_summary, score_rep
-from core.pose_detector import PoseDetector
-from core.rag_engine import RAGEngine
 from database import get_patient_by_id, update_patient_profile
 from sound_tts import play_error, play_good, speak
 
@@ -69,17 +64,9 @@ def load_reference(path):
     return np.load(str(p)) if p.exists() else None
 
 
-@st.cache_data
 def detect_cameras():
-    available = []
-    for i in range(5):
-        cap = cv2.VideoCapture(i)
-        if cap.isOpened():
-            ret, _ = cap.read()
-            if ret:
-                available.append(i)
-            cap.release()
-    return available if available else [0]
+    # WebRTC uses the browser camera, not server-side cameras. Scanning with OpenCV on Streamlit Cloud wastes memory.
+    return [0]
 
 
 EXERCISE_TARGETS = {
@@ -106,8 +93,12 @@ JOINT_TO_LM = {
 }
 
 
-class VideoProcessor(VideoProcessorBase):
+class VideoProcessor:
     def __init__(self):
+        import av
+        import cv2
+        self.av = av
+        self.cv2 = cv2
         self.ex_id = None
         self.targets = {}
         self.tolerance = 15
@@ -134,12 +125,12 @@ class VideoProcessor(VideoProcessorBase):
         self.completed = False
         self.rag = None
 
-    def recv(self, frame: av.VideoFrame) -> av.VideoFrame:
+    def recv(self, frame):
         img = frame.to_ndarray(format="bgr24")
         if self.completed or not self.ex_id or not self.detector:
-            return av.VideoFrame.from_ndarray(img, format="bgr24")
+            return self.av.VideoFrame.from_ndarray(img, format="bgr24")
 
-        img = cv2.flip(img, 1)
+        img = self.cv2.flip(img, 1)
         results, frame_rgb = self.detector.process_frame(img)
 
         angles = {}
@@ -186,8 +177,8 @@ class VideoProcessor(VideoProcessorBase):
         annotated = self.detector.draw_landmarks(frame_rgb, results, joint_colors)
         h, w = annotated.shape[:2]
         
-        cv2.rectangle(annotated, (0, 0), (w, 52), (5, 8, 20), -1)
-        cv2.putText(annotated, f"Reps: {self.rep_count}/{self.target_reps}", (12, 34), cv2.FONT_HERSHEY_SIMPLEX, 0.85, (248, 250, 252), 2)
+        self.cv2.rectangle(annotated, (0, 0), (w, 52), (5, 8, 20), -1)
+        self.cv2.putText(annotated, f"Reps: {self.rep_count}/{self.target_reps}", (12, 34), self.cv2.FONT_HERSHEY_SIMPLEX, 0.85, (248, 250, 252), 2)
 
         with self.lock:
             scores = list(self.scores_history)
@@ -196,19 +187,19 @@ class VideoProcessor(VideoProcessorBase):
         if scores:
             last_score = scores[-1]
             color = (34, 197, 94) if last_score >= 75 else (245, 158, 11) if last_score >= 50 else (244, 63, 94)
-            cv2.putText(annotated, f"Score: {last_score:.0f}", (w - 165, 34), cv2.FONT_HERSHEY_SIMPLEX, 0.8, color, 2)
+            self.cv2.putText(annotated, f"Score: {last_score:.0f}", (w - 165, 34), self.cv2.FONT_HERSHEY_SIMPLEX, 0.8, color, 2)
 
         if feedback and (self.frame_n - self.last_feedback_time) < 60:
             for i, msg in enumerate(feedback[:2]):
                 clean = msg.encode("ascii", "ignore").decode()[:70]
                 y_pos = h - 62 + i * 24
-                cv2.rectangle(annotated, (8, y_pos - 17), (min(len(clean) * 8 + 18, w - 8), y_pos + 7), (10, 13, 26), -1)
-                cv2.putText(annotated, clean, (12, y_pos), cv2.FONT_HERSHEY_SIMPLEX, 0.42, (248, 250, 252), 1, cv2.LINE_AA)
+                self.cv2.rectangle(annotated, (8, y_pos - 17), (min(len(clean) * 8 + 18, w - 8), y_pos + 7), (10, 13, 26), -1)
+                self.cv2.putText(annotated, clean, (12, y_pos), self.cv2.FONT_HERSHEY_SIMPLEX, 0.42, (248, 250, 252), 1, self.cv2.LINE_AA)
 
         self.frame_n += 1
         
-        out_img = cv2.cvtColor(annotated, cv2.COLOR_RGB2BGR)
-        return av.VideoFrame.from_ndarray(out_img, format="bgr24")
+        out_img = self.cv2.cvtColor(annotated, self.cv2.COLOR_RGB2BGR)
+        return self.av.VideoFrame.from_ndarray(out_img, format="bgr24")
 
 
 DEFAULTS = {
@@ -229,8 +220,11 @@ for key, value in DEFAULTS.items():
     if key not in st.session_state:
         st.session_state[key] = value
 
-if "rag" not in st.session_state:
-    st.session_state.rag = RAGEngine()
+def get_rag():
+    if "rag" not in st.session_state:
+        from core.rag_engine import RAGEngine
+        st.session_state.rag = RAGEngine()
+    return st.session_state.rag
 
 
 def detect_rep(angles, exercise_id, in_progress):
@@ -1155,6 +1149,9 @@ elif page == "Exercices":
     if st.session_state.running and ex_id:
         targets = EXERCISE_TARGETS.get(ex_id, {})
         ref_data = load_reference(selected_exercise.get("reference_file", ""))
+        from core.pose_detector import PoseDetector
+        from streamlit_webrtc import webrtc_streamer
+
         detector = PoseDetector(0.6, 0.6)
 
         webrtc_ctx = webrtc_streamer(
@@ -1176,7 +1173,7 @@ elif page == "Exercices":
                     processor.ref_data = ref_data
                     processor.detector = detector
                     processor.target_reps = target_reps
-                    processor.rag = st.session_state.rag
+                    processor.rag = get_rag()
 
             try:
                 while webrtc_ctx.state.playing and st.session_state.running:
@@ -1373,7 +1370,7 @@ elif page == "Protocole":
     else:
         st.info("Votre kinésithérapeute n'a pas encore assigné de protocole.")
 
-    proto = st.session_state.rag.get_protocol_detail(ex_id) if ex_id else None
+    proto = get_rag().get_protocol_detail(ex_id) if ex_id else None
     if proto:
         st.markdown(
             f"""
