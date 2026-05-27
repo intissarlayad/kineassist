@@ -1,0 +1,94 @@
+{
+  "exercises": [
+    {
+      "id": "knee_flexion",
+      "name": "Flexion du genou",
+      "description": "Flechissez le genou lentement jusqu'a 90 degres, puis revenez a la position initiale. Gardez le dos droit.",
+      "reference_file": "data/references/knee_flexion_ref.npy",
+      "target_joints": ["left_knee", "right_knee"],
+      "reps": 10,
+      "pathologies": ["post_lca", "gonarthrose"],
+      "category": "Membres inférieurs"
+    },
+    {
+      "id": "arm_raise",
+      "name": "Elevation du bras",
+      "description": "Montez le bras tendu jusqu'a la verticale, controllez la descente sur 3 secondes. Epaule stable.",
+      "reference_file": "data/references/arm_raise_ref.npy",
+      "target_joints": ["left_shoulder", "right_shoulder"],
+      "reps": 12,
+      "pathologies": ["post_avc", "epaule_coiffe"],
+      "category": "Membres supérieurs"
+    },
+    {
+      "id": "trunk_rotation",
+      "name": "Rotation du tronc",
+      "description": "Tournez le buste de gauche a droite sans bouger les hanches. Mouvement lent et controle.",
+      "reference_file": "data/references/trunk_rotation_ref.npy",
+      "target_joints": ["left_hip", "right_hip"],
+      "reps": 8,
+      "pathologies": ["lombalgie", "post_avc"],
+      "category": "Rachis"
+    },
+    {
+      "id": "squat",
+      "name": "Squat (Flexion sur jambes)",
+      "description": "Descendez lentement en pliant les genoux jusqu'à 90°, dos droit, puis remontez. Idéal pour renforcer les quadriceps et les fessiers.",
+      "reference_file": "data/references/knee_flexion_ref.npy",
+      "target_joints": ["left_knee", "right_knee", "left_hip", "right_hip"],
+      "reps": 10,
+      "pathologies": ["post_lca", "gonarthrose", "instabilite_genou"],
+      "category": "Membres inférieurs"
+    },
+    {
+      "id": "hip_extension",
+      "name": "Extension de hanche (Donkey Kick)",
+      "description": "À 4 pattes, levez une jambe vers l'arrière en gardant le genou fléchi à 90°. Contractez les fessiers au sommet.",
+      "reference_file": "data/references/knee_flexion_ref.npy",
+      "target_joints": ["left_hip", "right_hip"],
+      "reps": 12,
+      "pathologies": ["lombalgie", "instabilite_hanche"],
+      "category": "Membres inférieurs"
+    },
+    {
+      "id": "lunge",
+      "name": "Fente avant (Lunge)",
+      "description": "Faites un grand pas en avant, descendez le genou arrière vers le sol, puis revenez. Travail unilatéral pour corriger les asymétries.",
+      "reference_file": "data/references/knee_flexion_ref.npy",
+      "target_joints": ["left_knee", "right_knee", "left_hip", "right_hip"],
+      "reps": 10,
+      "pathologies": ["asymetrie_musculaire", "deficit_equilibre"],
+      "category": "Membres inférieurs"
+    },
+    {
+      "id": "lateral_raise",
+      "name": "Élévation latérale d'épaule",
+      "description": "Bras le long du corps, montez les deux bras sur les côtés jusqu'à 90° (épaules), sans hausser les épaules. Mouvement lent et contrôlé.",
+      "reference_file": "data/references/arm_raise_ref.npy",
+      "target_joints": ["left_shoulder", "right_shoulder"],
+      "reps": 12,
+      "pathologies": ["capsulite", "conflit_sous_acromial", "raideur_epaule"],
+      "category": "Membres supérieurs"
+    },
+    {
+      "id": "bicep_curl",
+      "name": "Flexion du coude (Biceps Curl)",
+      "description": "Bras le long du corps, fléchissez l'avant-bras jusqu'à 140° en gardant le coude fixe. Contrôlez la descente.",
+      "reference_file": "data/references/arm_raise_ref.npy",
+      "target_joints": ["left_elbow", "right_elbow"],
+      "reps": 12,
+      "pathologies": ["epicondylite", "epitrochleite", "post_fracture_coude"],
+      "category": "Membres supérieurs"
+    },
+    {
+      "id": "good_morning",
+      "name": "Good Morning (Flexion de hanche)",
+      "description": "Debout, pieds écartés, penchez le buste en avant en reculant les hanches, dos bien droit. Vérification de l'alignement oreille-épaule-hanche.",
+      "reference_file": "data/references/trunk_rotation_ref.npy",
+      "target_joints": ["left_hip", "right_hip", "left_shoulder", "right_shoulder"],
+      "reps": 10,
+      "pathologies": ["lombalgie_chronique", "prevention_lombalgie"],
+      "category": "Rachis"
+    }
+  ]
+}

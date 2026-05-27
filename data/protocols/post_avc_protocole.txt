@@ -1,0 +1,106 @@
+PROTOCOLE DE REEDUCATION MOTRICE POST-AVC
+Source : HAS 2022 - Parcours de soins apres un AVC
+        Societe Francaise de Medecine Physique et de Readaptation (SOFMER)
+
+=== CONTEXTE CLINIQUE ===
+L'AVC entraine frequemment :
+- Hemiplegie ou hemiparesie (50-80% des cas)
+- Spasticite (30-40% des patients a 3 mois)
+- Troubles de la proprioception (40% des patients)
+- Fatigue post-AVC (50-70% des patients)
+- Troubles cognitifs associes (30% des cas)
+
+Recuperation motrice :
+- 70% de la recuperation dans les 3 premiers mois
+- Plasticite cerebrale active jusqu'a 2 ans post-AVC
+- Recuperation possible au-dela avec rééducation intensive
+
+=== PRINCIPES FONDAMENTAUX ===
+1. Intensite : minimum 45 minutes de therapie active par jour
+2. Repetitions : 300-400 mouvements par seance pour induire neuroplasticite
+3. Progressivite : augmenter la complexite des taches
+4. Tache-specifique : travailler les gestes fonctionnels de la vie quotidienne
+5. Double tache : integrer aspect cognitif + moteur progressivement
+
+=== REEDUCATION MEMBRE SUPERIEUR POST-AVC ===
+
+Phase 1 (J0 - J30) : Phase aigue
+Objectifs moteurs :
+- Prevenir les complications (epaule douloureuse, contractures)
+- Initier la mobilisation precoce
+- Stimuler la proprioception
+
+Exercices elevation bras cote hemiplegique :
+- Mobilisation passive par le therapeute : 0-90 degres, 3 x 10
+- Elevation active-aidee avec l'autre bras : 3 x 10
+- Positionnement antalgique : bras sur coussin d'abduction 20-30 degres
+
+Criteres angulaires epaule hemiplegique :
+- Semaine 1-2 : elevation passive 60-90 degres maximum
+- Semaine 3-4 : elevation active aidee 90-120 degres
+- Attention : NE JAMAIS forcer si subluxation glenohunerale
+
+Surveillance obligatoire :
+- Douleur epaule (TRES frequente : 30-70% post-AVC)
+- Oedeme de la main
+- Spasticite des flechisseurs (score Ashworth)
+
+Phase 2 (J30 - J90) : Phase subaigue
+Objectifs :
+- Recuperer l'elevation active 0-160 degres
+- Reduire la spasticite par l'activite (etirement lent)
+- Travailler la dissociation segmentaire
+
+Exercices specifiques :
+- Elevation active en rotation externe : contre la spasticite en rotation interne
+- Exercices en miroir (mirror therapy) : efficacite prouvee niveau 1
+- Contrainte induite du cote sain : oblige le cote hemiplegique a travailler
+- Stimulation electrique fonctionnelle (FES) si denervation
+
+Erreurs a surveiller specifiquement post-AVC :
+- Syncinesia : mouvements involontaires associes (serrer le poing en levant le bras)
+- Compensation par le tronc : tres frequente, masque le deficit reel
+- Spasticite en flexion du coude : empêche l'elevation complete
+- Neglect (heminegligence) : patient ne regarde pas son cote hemiplegique
+
+Messages de feedback adaptes post-AVC :
+- "Essayez de tourner la paume vers le haut."
+- "Regardez votre bras gauche. Concentrez-vous sur lui."
+- "Respirez normalement pendant le mouvement."
+- "C'est normal si c'est difficile. Chaque repetition aide votre cerveau a se reorganiser."
+
+=== REEDUCATION MEMBRE INFERIEUR POST-AVC ===
+
+Specificites :
+- Marche : objectif premier pour l'autonomie
+- Extenseur genou spastique (steppage) : frequent
+- Pied tombant (steppage) : 20% des AVC
+
+Exercices flexion genou cote hemiplegique :
+- Flexion active en decubitus ventral : 3 x 10
+- Flexion en position debout avec appui : 3 x 12
+- Velo ergometrique : 20 minutes (facilite le schema croise)
+
+Criteres angulaires membres inferieurs :
+- Flexion genou cible : 90 degres pour la marche normale
+- Extension complete obligatoire pour la mise en charge
+- Symetrie du pas : evaluer par tapis de marche si possible
+
+=== INTEGRATION DANS LE SYSTEME IA ===
+
+Parametres a surveiller en temps reel :
+- Elévation epaule : compenser ou non par inclinaison tronc
+- Flexion genou : symetrie cote hemiplegique vs cote sain
+- Vitesse du mouvement : ralentissement = spasticite ou fatigue
+- Amplitude : progression semaine par semaine
+
+Alertes automatiques recommandees :
+- Chute amplitude > 20% vs session precedente : FATIGUE post-AVC
+- Asymetrie > 30 degres : ALERTE kinesitherapeute
+- Arret premature < 5 reps : douleur probable
+
+REFERENCES :
+- HAS 2022 : Parcours de soins apres un accident vasculaire cerebral
+- Kwakkel G et al. (2015) : Constraint-induced movement therapy - Lancet Neurology
+- Langhorne P et al. (2009) : Motor recovery after stroke - Lancet Neurology
+- SOFMER 2016 : Reeducation et readaptation de l'adulte hemi-plegique

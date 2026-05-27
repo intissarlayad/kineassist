@@ -1,0 +1,113 @@
+GUIDE DES ERREURS BIOMECANIQUES - DETECTION ET CORRECTION
+Source : Compilation protocoles HAS + litterature biomecanique
+Usage : Base de connaissance pour systeme de detection automatique
+
+=== ERREURS GENOU ===
+
+ERREUR 1 : Flexion insuffisante du genou
+Seuil detection : angle genou > 120 degres quand cible = 90 degres
+Consequence clinique : activation insuffisante des ischio-jambiers, progres lent
+Correction : "Flechissez davantage le genou. Imaginez vouloir toucher votre fessier avec votre talon."
+Cause frequente : douleur, apprehension, raideur capsulaire posterieure
+Action therapeute : verifier l'absence de conflit femorotibial, tester la souplesse des ischio-jambiers
+
+ERREUR 2 : Flexion excessive du genou
+Seuil detection : angle genou < 70 degres quand cible = 90 degres
+Consequence clinique : surcharge condylienne, douleur femoropatellaire
+Correction : "Reduisez l'amplitude. Arretez-vous quand vous sentez la tension."
+Cause frequente : hyperlaxite, compensation musculaire
+
+ERREUR 3 : Valgus dynamique du genou (genou qui rentre vers l'interieur)
+Seuil detection : deviation mediale > 10 degres de l'axe neutre
+Consequence clinique : stress ligament croise anterieur, syndrome de l'essuie-glace
+CRITIQUE : risque de recidive post-LCA
+Correction : "Gardez votre genou dans l'axe de votre 2eme orteil. Poussez le genou vers l'exterieur."
+
+ERREUR 4 : Compensation lombaire lors flexion genou
+Seuil detection : angle hanche < 150 degres quand elle devrait rester a 170 degres
+Consequence clinique : lombalgie secondaire, fausse progression de la flexion genou
+Correction : "Gardez le dos droit. Seul le genou doit bouger, pas votre bassin."
+
+=== ERREURS EPAULE ===
+
+ERREUR 5 : Elevation insuffisante de l'epaule
+Seuil detection : angle epaule < 130 degres quand cible = 160 degres
+Consequence clinique : renforcement insuffisant du deltoid, progression lente
+Correction : "Montez le bras plus haut. Imaginez vouloir toucher le plafond avec votre main."
+Post-AVC : utiliser la facilitation proprioceptive neuromusculaire (FNP)
+
+ERREUR 6 : Haussement d'epaule (elevation du trapeze)
+Seuil detection : elevation de l'epaule visible sans elevation du bras correspondante
+Consequence clinique : surmenage du trapeze superieur, conflit sous-acromial
+CRITIQUE en post-chirurgie coiffe
+Correction : "Baissez l'epaule avant de lever le bras. Rentrez l'epaule dans la poche."
+
+ERREUR 7 : Rotation interne forcee au-dela de 90 degres
+Consequence clinique : conflit sous-acromial, douleur arc 60-120 degres
+Correction : "Tournez legerement la paume vers le haut quand vous montez le bras."
+
+ERREUR 8 : Inclinaison laterale du tronc compensatrice
+Seuil detection : inclinaison tronc > 10 degres pendant elevation bras
+Consequence clinique : fausse amplitude d'elevation, surcharge rachidienne
+Correction : "Gardez le dos bien droit contre le dossier. Seul le bras doit bouger."
+
+=== ERREURS ROTATION TRONC ===
+
+ERREUR 9 : Rotation initiee par le bassin
+Seuil detection : mouvement du bassin detecte avant rotation des epaules
+Consequence clinique : substitution lombaire, pas de gain de mobilite thoracique
+CRITIQUE : erreur la plus frequente et la plus dommageable
+Correction : "Bloquez votre bassin. Imaginez etre assis sur un tabouret rotatif fixe. Seul le haut du corps tourne."
+
+ERREUR 10 : Amplitude insuffisante en rotation
+Seuil detection : rotation epaule < 25 degres quand cible = 40 degres
+Consequence clinique : exercice inefficace, pas de gain de mobilite
+Correction : "Tournez davantage. Regardez loin derriere vous dans la direction de la rotation."
+
+ERREUR 11 : Flexion laterale associee a la rotation
+Consequence clinique : compensation par les muscles lateraux, stress facettaire
+Correction : "Restez bien droit en hauteur. Ne penchez pas sur le cote."
+
+ERREUR 12 : Apnee durant la rotation
+Consequence clinique : augmentation pression intradiscale, risque cardiovasculaire
+Correction : "Expirez en tournant, inspirez en revenant. Ne bloquez pas votre respiration."
+
+=== GRILLE DE SEVERITE ===
+
+CRITIQUE (Score < 40/100) :
+- Valgus dynamique genou post-LCA
+- Rotation lombaire forcee (hernie discale)
+- Subluxation glenohunerale (post-AVC)
+Action : Arreter la seance, contacter le kinesitherapeute
+
+MODERE (Score 40-70/100) :
+- Compensations observees mais mouvement possible
+- Amplitude insuffisante > 20 degres de la cible
+Action : Corriger immediatement, reduire l'amplitude, continuer
+
+BON (Score 70-85/100) :
+- Ecart < 15 degres de la cible
+- Compensations mineures
+Action : Feedback positif, ajustement mineur
+
+EXCELLENT (Score > 85/100) :
+- Dans les criteres angulaires
+- Pas de compensation detectee
+Action : Encouragement, progression possible
+
+=== MESSAGES DE FEEDBACK ===
+
+Feedback positif :
+- "Excellent mouvement ! Position parfaite, continuez ainsi."
+- "Tres bon controle. Votre amplitude s'ameliore."
+- "Position correcte. Vous etes dans les criteres du protocole."
+
+Feedback correctif modere :
+- "Presque ! Augmentez un peu l'amplitude."
+- "Bonne direction, mais gardez le dos droit."
+- "Le mouvement est trop rapide. Prenez 3 secondes pour aller, 3 secondes pour revenir."
+
+Feedback correctif urgent :
+- "Stop ! Revenez a la position de depart et recommencez lentement."
+- "Attention, votre genou part vers l'interieur. C'est risque."
+- "Votre bassin bouge. Fixez-le avant de continuer."

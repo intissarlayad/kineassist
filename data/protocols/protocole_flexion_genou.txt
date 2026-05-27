@@ -1,0 +1,81 @@
+PROTOCOLE DE REEDUCATION - FLEXION DU GENOU
+Source : Haute Autorite de Sante (HAS) - Recommandations professionnelles
+Pathologies : Gonarthrose, Post-chirurgie LCA, Fracture rotule, Syndrome femoropatellaire
+
+=== PHASE 1 : SEMAINES 1-2 (Phase aigue) ===
+Objectifs :
+- Reduire la douleur et l'inflammation
+- Maintenir la mobilite passive : 0 a 45 degres
+- Prevenir l'amyotrophie du quadriceps
+
+Exercices prescrits :
+- Flexion passive assistee 0-45 degres : 3 series x 10 repetitions, pause 30s entre series
+- Contractions isometriques quadriceps (genou tendu) : 10s contraction / 10s repos, 3 x 10
+- Elevation jambe tendue : 3 x 15 repetitions
+
+Criteres angulaires :
+- Angle genou cible : 45 degres maximum semaine 1
+- Angle hanche : neutre (170-180 degres)
+- Compensation lombaire : INTERDITE (surveillance angle hanche > 150 degres)
+
+Erreurs biocaniques a surveiller :
+- Genou en valgus lors de la flexion (genou qui rentre vers l'interieur)
+- Compensation par flexion du tronc
+- Manque d'amplitude : angle < 30 degres = exercice inefficace
+- Douleur > 3/10 : STOP immediat
+
+Frequence : 2 fois par jour, 5 jours par semaine
+Glace : 15 minutes apres chaque seance
+
+=== PHASE 2 : SEMAINES 3-4 (Phase subaigue) ===
+Objectifs :
+- Atteindre 70-90 degres de flexion active
+- Renforcer ischio-jambiers et quadriceps
+- Debut de la proprioception
+
+Exercices prescrits :
+- Flexion active contre gravite 0-70 degres : 3 x 12 repetitions
+- Squat partiel 0-45 degres en charge partielle : 3 x 10
+- Velo ergometrique (resistance minimale) : 15 minutes
+- Proprioception : appui unipodal 30 secondes x 3
+
+Criteres angulaires :
+- Angle genou cible : 90 degres en fin de phase
+- Vitesse du mouvement : 3 secondes aller / 3 secondes retour (controle excentrique)
+- Symetrie droite/gauche : ecart < 10 degres acceptable
+
+Erreurs biocaniques a surveiller :
+- Rotation interne du genou (valgus dynamique) : CRITIQUE
+- Ascension du bassin lors de la flexion : compensation lombaire
+- Mouvement trop rapide : perd le benefice excentrique
+- Blocage respiratoire : risque de Valsalva
+
+Frequence : 1 fois par jour, 5 jours par semaine
+
+=== PHASE 3 : SEMAINES 5-8 (Phase fonctionnelle) ===
+Objectifs :
+- Flexion complete 0-135 degres
+- Retour aux activites quotidiennes
+- Renforcement fonctionnel
+
+Exercices prescrits :
+- Flexion complete avec resistance elastique : 3 x 15
+- Montee/descente d'escaliers : 3 x 10 marches
+- Squat complet progressif : 3 x 12
+- Marche nordique : 20-30 minutes
+
+Criteres angulaires cibles :
+- Genou : 120-135 degres en fin de phase
+- Hanche : 90-110 degres lors du squat complet
+- Cheville : dorsiflexion 15-20 degres
+
+Criteres de retour au sport (post-LCA) :
+- Force quadriceps >= 80% cote sain
+- Flexion >= 130 degres sans douleur
+- Saut unipodal >= 85% cote sain
+- Delai minimum : 6 mois post-chirurgie
+
+REFERENCES SCIENTIFIQUES :
+- HAS 2008 : Reeducation dans l'arthrose du genou
+- Beynnon BD et al. (2005) : Rehabilitation after ACL reconstruction
+- van Grinsven S et al. (2010) : Evidence-based rehabilitation following ACL reconstruction

@@ -1,0 +1,39 @@
+# .gitignore – KineAssist
+# Python artifacts
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pdb
+*.egg-info/
+*.egg
+*.log
+
+# Virtual environments
+venv/
+.env/
+ENV/
+
+# IDE / editor files
+.idea/
+.vscode/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Jupyter notebooks
+.ipynb_checkpoints/
+
+# Secrets – NEVER push
+.secrets.toml
+.secret*
+.streamlit/secrets.toml
+
+# SQLite database (local)
+kineassist.db
+*.sqlite
+
+# OS generated files
+.DS_Store
+Thumbs.db

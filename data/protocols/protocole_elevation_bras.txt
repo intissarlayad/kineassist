@@ -1,0 +1,88 @@
+PROTOCOLE DE REEDUCATION - ELEVATION DU MEMBRE SUPERIEUR
+Source : HAS - Recommandations pour la reeducation post-AVC et pathologies epaule
+Pathologies : Post-AVC hemiplegique, Rupture coiffe des rotateurs, Conflit sous-acromial, Capsulite retractile
+
+=== ANATOMIE ET BIOMECANIQUE ===
+L'elevation du bras implique :
+- Articulation glenohunerale : 120 degres de rotation
+- Articulation scapulothoracique : 60 degres (rythme scapulohumeral 2:1)
+- Rotation externe obligatoire au-dela de 90 degres pour eviter le conflit
+
+Muscles principaux :
+- Deltoid anterieur : elevation 0-90 degres
+- Sus-epineux : initiation du mouvement (0-15 degres)
+- Trapeze superieur et serratus anterior : rotation de l'omoplate
+
+=== PHASE 1 : SEMAINES 1-2 ===
+Objectifs :
+- Recuperer la mobilite passive jusqu'a 90 degres
+- Eviter la subluxation glenohunerale (post-AVC)
+- Stimulation proprioceptive precoce
+
+Exercices :
+- Elevation passive assistee par le therapeute : 0-60 degres, 3 x 10
+- Poulie simple pour elevation active-aidee : 3 x 12
+- Exercices Codman (pendulaires) : 5 minutes, 2 fois par jour
+- Cryotherapie : 15 minutes avant la seance si inflammation
+
+Criteres angulaires :
+- Epaule : 60-90 degres cible semaine 2
+- Coude : tendu (170-180 degres) pour isoler l'epaule
+- Rotation externe : maintenir 20-30 degres pour liberer l'acromion
+
+Erreurs biocaniques CRITIQUES :
+- Elevation de l'epaule (haussement d'epaule) : signe de compensation par le trapeze superieur
+- Inclinaison laterale du tronc : compensation par les muscles du dos
+- Rotation interne forcee au-dela de 90 degres : CONFLIT SOUS-ACROMIAL
+- Mouvement douloureux arc 60-120 degres : arc douloureux = pathologie coiffe
+
+Signes d'alerte STOP :
+- Douleur > 4/10
+- Craquement glenohumeral
+- Engourdissement du membre
+
+=== PHASE 2 : SEMAINES 3-4 ===
+Objectifs :
+- Elevation active 0-120 degres
+- Renforcement isocinetique progressif
+- Coordination scapulohunerale
+
+Exercices :
+- Elevation active en rotation externe : 3 x 12
+- Renforcement coiffe des rotateurs (rotation externe contre resistance) : 3 x 15
+- Elevation laterale controlee 0-90 degres : 3 x 12
+- Gainage scapulaire : retraction omoplate 10s x 10 repetitions
+
+Criteres angulaires :
+- Epaule cible : 120-140 degres
+- Controle de la phase excentrique (descente) : 4 secondes minimum
+- Rythme scapulohumeral : verifier que l'omoplate tourne avec le bras
+
+Post-AVC specificites :
+- Travailler la dissociation spatiale membre superieur/tronc
+- Exercices en miroir (mirror therapy) si deficit moteur important
+- Stimulation electrique fonctionnelle si denervation partielle
+
+=== PHASE 3 : SEMAINES 5-8 ===
+Objectifs :
+- Elevation complete 0-160 degres sans douleur
+- Retour aux activites de la vie quotidienne
+- Prevention des recidives
+
+Exercices :
+- Elevation complete avec resistance progressive
+- Exercices fonctionnels : atteindre objets en hauteur, habillage
+- Renforcement des stabilisateurs de l'omoplate
+- Stretching capsule posterieure : 3 x 30 secondes
+
+Criteres de fin de reeducation :
+- Force abduction >= 80% cote sain
+- Elevation >= 160 degres sans compensation
+- Pas de douleur dans les AVQ
+- Rythme scapulohumeral normal
+
+REFERENCES SCIENTIFIQUES :
+- HAS 2012 : Reeducation apres chirurgie de la coiffe des rotateurs
+- Haute Autorite de Sante : Prise en charge de l'AVC 2022
+- Ludewig PM, Reynolds JF (2009) : The association of scapular kinematics and glenohumeral joint pathologies
+- Neer CS (1983) : Impingement lesions - Clinical Orthopaedics

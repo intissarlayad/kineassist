@@ -1,0 +1,22 @@
+# Vision + Detection
+streamlit>=1.32.0
+mediapipe>=0.10.0
+opencv-python-headless>=4.8.0
+numpy>=1.24.0
+pillow>=10.0.0
+
+# Scoring mouvement
+fastdtw>=0.3.4
+scipy>=1.11.0
+
+# RAG - Recherche semantique locale (sans API)
+sentence-transformers>=2.7.0
+faiss-cpu>=1.7.4
+
+# Rapport PDF
+reportlab>=4.0.0
+pdfplumber
+
+# Base de données & environnement
+psycopg2-binary>=2.9.9
+python-dotenv>=1.0.0

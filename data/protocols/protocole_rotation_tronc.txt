@@ -1,0 +1,93 @@
+PROTOCOLE DE REEDUCATION - ROTATION DU TRONC / RACHIS THORACIQUE
+Source : HAS - Recommandations lombalgie et reeducation rachidienne
+Pathologies : Lombalgie chronique, Raideur thoracique, Post-AVC, Scoliose fonctionnelle, Cervicalgie
+
+=== BIOMECANIQUE DE LA ROTATION THORACIQUE ===
+Amplitudes normales :
+- Rotation thoracique totale : 35-45 degres de chaque cote
+- Rotation lombaire : seulement 5-7 degres (rachis lombaire peu mobile en rotation)
+- La majorite de la rotation du tronc vient du segment T1-T12
+
+Muscles impliques :
+- Rotation droite : oblique interne droit + oblique externe gauche
+- Stabilisateurs : multifides, carres des lombes, transverse abdominal
+- Muscles posturaux : erecteurs du rachis
+
+=== PHASE 1 : SEMAINES 1-2 ===
+Objectifs :
+- Restaurer la mobilite thoracique passive : 15-25 degres
+- Activer les stabilisateurs profonds (plancher pelvien, transverse)
+- Eliminer les compensations lombaires
+
+Exercices :
+- Rotation thoracique en decubitus : genoux flechis, bras tendus, rotation des epaules 15-20 degres, 3 x 8 chaque cote
+- Mobilisation en position assise (sans mouvement du bassin) : 2 x 10
+- Activation transverse abdominal : 10 contractions 10 secondes, 3 fois par jour
+
+Criteres angulaires :
+- Rotation epaule cible : 20-25 degres semaine 2
+- Bassin : IMMOBILE - critere principal de bonne execution
+- Angle hanche : 90 degres en position assise (neutre)
+
+Erreurs biocaniques CRITIQUES :
+- Rotation initiee par le bassin : SUBSTITUTION LOMBAIRE - erreur majeure
+- Flexion laterale associee a la rotation : signe de compensation
+- Blocage de la respiration : augmente la pression intradiscale
+- Mouvement trop ample forcant sur la capsule : risque facettaire
+
+Contre-indications relatives :
+- Hernie discale aigue L4-L5 ou L5-S1 : eviter rotation sous charge
+- Spondylolisthesis : amplitude limitee a 15 degres maximum
+- Fracture tassement vertebral : CONTRE-INDICATION ABSOLUE
+
+=== PHASE 2 : SEMAINES 3-4 ===
+Objectifs :
+- Rotation active 30-40 degres
+- Integration de la stabilisation lombaire
+- Exercices en chaine fermee
+
+Exercices :
+- Rotation thoracique en position assise active : 3 x 10 chaque cote
+- Exercice du chat/chameau avec rotation : 3 x 8
+- Rotation avec baton : controle du mouvement et de la symetrie : 3 x 12
+- Gainage antirotation (Pallof press) : 3 x 12
+
+Criteres angulaires :
+- Epaule cible : 35-45 degres chaque cote
+- Symetrie : ecart < 5 degres entre droite et gauche acceptable
+- Maintien position 2 secondes en fin d'amplitude : renforce la proprioception
+
+Specificite Post-AVC :
+- Travailler la rotation VERS le cote hemiplegique en priorite
+- Exercices de double tache cognitivo-moteur (tourner + compter)
+- Stimulation sensorielle du cote neglige (brosse, vibration)
+
+=== PHASE 3 : SEMAINES 5-8 ===
+Objectifs :
+- Rotation complete 45 degres sans douleur
+- Retour aux AVQ (conduite, sport, travail)
+- Prevention rechutes
+
+Exercices :
+- Rotation fonctionnelle avec resistance : 3 x 15
+- Exercices proprioceptifs sur plan instable
+- Etirements capsulaires thoraciques : 3 x 30 secondes
+- Reprise activite sportive progressive (golf, tennis, natation)
+
+Criteres de fin de reeducation :
+- Rotation >= 40 degres sans compensation pelvienne
+- Pas de douleur rachidienne durant le mouvement
+- Symetrie droite/gauche < 5 degres d'ecart
+- EVA douleur < 2/10 en fin de seance
+
+PREVENTION ET CONSEILS :
+- Echauffement thoracique systematique avant sport
+- Posture de travail : ecran a hauteur des yeux, siege reglable
+- Exercices d'entretien 3 fois par semaine a vie si lombalgie chronique
+- Ne jamais forcer une rotation douloureuse
+
+REFERENCES SCIENTIFIQUES :
+- HAS 2019 : Prise en charge de la lombalgie commune
+- Roussouly P, Pinheiro-Franco JL (2011) : Biomechanical analysis of the spino-pelvic organization
+- McGill SM (2010) : Core training: Evidence translating to better performance and injury prevention
+- Airaksinen O et al. (2006) : European guidelines for chronic low back pain
