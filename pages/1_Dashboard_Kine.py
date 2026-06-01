@@ -835,7 +835,7 @@ with col_detail:
                 if mail_ok:
                     st.success(f"Email renvoyé à {patient['email']} !")
                 else:
-                    APP_URL = os.getenv("APP_URL", "http://localhost:8501")
+                    APP_URL = st.secrets["APP_URL"]
                     lien = f"{APP_URL}?token={token}"
                     st.warning(f"Email non envoyé : {mail_msg}")
                     st.code(lien, language=None)
